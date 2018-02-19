@@ -21,6 +21,10 @@ $ git clone https://github.com/rolerbol/to-do-application.git
 ```bash
 $ composer install
 ```
+
+Using option '1' for all modules
+
+
 ## Development mode
 
 The skeleton ships with [zf-development-mode](https://github.com/zfcampus/zf-development-mode)
