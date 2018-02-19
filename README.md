@@ -36,6 +36,12 @@ $ source to-do-application-dump.sql
 
 Using option '1' for all modules
 
+## Exist ADMIN User
+
+email : rolerbol@abv.bg
+password : 123456
+
+## When register user is with normal 'User' role!!!
 
 ## Development mode
 
