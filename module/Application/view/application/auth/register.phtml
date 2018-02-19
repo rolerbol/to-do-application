@@ -51,7 +51,6 @@
                         url: formActionUrl,
                         data: formData,
                         success: function(data) {
-                            debugger;
                             if (typeof data.homeUrl != 'undefined' && data.status) {
                                 window.location = data.homeUrl;
                             } else if (typeof data.content != 'undefined') {

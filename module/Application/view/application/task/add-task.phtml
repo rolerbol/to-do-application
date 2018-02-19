@@ -16,49 +16,6 @@
             <?php echo $this->formElementErrors($form->get('taskText'), array('class' => 'alert alert-danger list-unstyled')); ?>
         </div>
 
-        <?php // echo $this->formElement($form->get('submit')); ?>
-
         <?php echo $this->form()->closeTag(); ?>
     </div>
 </div>
-
-
-<?php if (empty($this->ajaxRequest) || !$this->ajaxRequest):?>
-    <script type="text/javascript">
-        jQuery(document).ready(function() {
-//            jQuery(document).on('click', '#addTaskButton', function(event) {
-//                event.preventDefault();
-//                event.stopPropagation();
-//                
-//                var formActionUrl = jQuery("#add-task-form").attr('action');
-//                var formData = jQuery("#add-task-form").serialize();
-//
-//                jQuery.ajax(
-//                    {
-//                        type: "POST",
-//                        url: formActionUrl,
-//                        data: formData,
-//                        success: function(data) {
-//                            if (typeof data.redirectUrl != 'undefined' && data.status) {
-//                                window.location = data.redirectUrl;
-//                            } else if (typeof data.content != 'undefined') {
-//                                jQuery('#createTaskContainer').html(data.content);
-//                            }
-//                        },
-//                        error: function(data) {
-//                            if (typeof data.message != 'undefined') {
-////                                jQuery('#errorMessage').html(data.message);
-//                            }
-//                        },
-//                        complete : function(data) {
-//
-//                        }
-//                    }
-//                );
-//
-//                return;
-//            });
-        });
-    </script>
-<?php endif;?>
-
