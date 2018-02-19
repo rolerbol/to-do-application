@@ -325,7 +325,11 @@ class TaskListController extends AbstractActionController
                      
             $fileName = $userTaskList->getName() . '.xlsx';
 
-            $fullPathName = __DIR__ . '/../../../../data/downloads/' . $fileName;
+            $fullPathName = __DIR__ .
+                    DIRECTORY_SEPARATOR 
+                    . '..'. DIRECTORY_SEPARATOR. '..'.DIRECTORY_SEPARATOR
+                    .'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR
+                    .'data'.DIRECTORY_SEPARATOR.'downloads'.DIRECTORY_SEPARATOR . $fileName;
             $writer = new Xlsx($spreadsheet);
             $writer->save($fullPathName);
 

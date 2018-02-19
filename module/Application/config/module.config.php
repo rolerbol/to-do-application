@@ -291,16 +291,16 @@ return [
         'not_found_template'       => 'error/404',
         'exception_template'       => 'error/index',
         'template_map' => [
-            'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
-            'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
-            'error/404'               => __DIR__ . '/../view/error/404.phtml',
-            'error/index'             => __DIR__ . '/../view/error/index.phtml',
+            'layout/layout'           => __DIR__ . DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'layout'.DIRECTORY_SEPARATOR.'layout.phtml',
+            'application/index/index' => __DIR__ . DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'application'.DIRECTORY_SEPARATOR.'index'.DIRECTORY_SEPARATOR.'index.phtml',
+            'error/404'               => __DIR__ . DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'error'.DIRECTORY_SEPARATOR.'404.phtml',
+            'error/index'             => __DIR__ . DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'error'.DIRECTORY_SEPARATOR.'index.phtml',
         ],
         'strategies' => [
             'ViewJsonStrategy'
         ],
         'template_path_stack' => [
-            __DIR__ . '/../view',
+            __DIR__ . DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'view',
         ],
     ],
     'view_helpers' => [

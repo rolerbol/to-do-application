@@ -237,7 +237,7 @@ class AuthController extends AbstractActionController
     {
         $moduleNames = array_keys($this->moduleManager->getLoadedModules());
 
-        $dirName                 = realpath(dirname(__DIR__) . '/../');
+        $dirName                 = realpath(dirname(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
         $directory               = new \RecursiveDirectoryIterator($dirName);
         $iterator                = new \RecursiveIteratorIterator($directory, \RecursiveIteratorIterator::SELF_FIRST);
         $regex                   = new \RegexIterator($iterator, '/^.+[a-zA-Z]+Controller\.php$/i', \RecursiveRegexIterator::GET_MATCH);

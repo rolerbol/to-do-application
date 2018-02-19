@@ -24,6 +24,10 @@ $ composer install
 
 Using option '1' for all modules
 
+## Excel exporting
+
+project-path/data/download must write and read permissions!
+
 ## Importing Mysql database
 
 ```bash
