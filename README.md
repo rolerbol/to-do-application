@@ -24,6 +24,18 @@ $ composer install
 
 Using option '1' for all modules
 
+## Importing Mysql database
+
+```bash
+$ mysql -u username -p
+$ enter you username password
+$ CREATE SCHEMA IF NOT EXISTS to_do_application;
+$ use to_do_application;
+$ source to-do-application-dump.sql
+```
+
+Using option '1' for all modules
+
 
 ## Development mode
 
