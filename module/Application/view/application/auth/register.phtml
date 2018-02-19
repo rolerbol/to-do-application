@@ -1,0 +1,77 @@
+<?php
+    $form = $this->form;
+    $form->setAttribute('action', $this->url('user.register'));
+    $form->prepare();
+?>
+
+<div class="row">
+    <div class="col-md-6">
+        <?php echo $this->flashMessenger()->renderCurrent('error', ['alert', 'alert-danger', 'list-unstyled']);?>
+        
+        <?php echo $this->form()->openTag($form); ?>
+
+        <div class="form-group">
+            <?php echo $this->formLabel($form->get('userEmail')); ?>
+            <?php echo $this->formElement($form->get('userEmail')); ?>
+            <?php echo $this->formElementErrors($form->get('userEmail'), array('class' => 'alert alert-danger list-unstyled')); ?>
+        </div>
+
+        <div class="form-group">
+            <?php echo $this->formLabel($form->get('userPassword')); ?>
+            <?php echo $this->formElement($form->get('userPassword')); ?>
+            <?php echo $this->formElementErrors($form->get('userPassword'), array('class' => 'alert alert-danger list-unstyled')); ?>
+        </div>
+        
+        <div class="form-group">
+            <?php echo $this->formLabel($form->get('rePassword')); ?>
+            <?php echo $this->formElement($form->get('rePassword')); ?>
+            <?php echo $this->formElementErrors($form->get('rePassword'), array('class' => 'alert alert-danger list-unstyled')); ?>
+        </div>
+
+        <?php echo $this->formElement($form->get('submit')); ?>
+
+        <?php echo $this->form()->closeTag(); ?>
+    </div>
+</div>
+
+
+<?php if (empty($this->ajaxRequest) || !$this->ajaxRequest):?>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            jQuery(document).on('click', '#registerButton', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                var formActionUrl = jQuery("#register-form").attr('action');
+                var formData = jQuery("#register-form").serialize();
+
+                jQuery.ajax(
+                    {
+                        type: "POST",
+                        url: formActionUrl,
+                        data: formData,
+                        success: function(data) {
+                            debugger;
+                            if (typeof data.homeUrl != 'undefined' && data.status) {
+                                window.location = data.homeUrl;
+                            } else if (typeof data.content != 'undefined') {
+                                jQuery('#register').html(data.content);
+                            }
+                        },
+                        error: function(data) {
+                            if (typeof data.message != 'undefined') {
+//                                jQuery('#errorMessage').html(data.message);
+                            }
+                        },
+                        complete : function(data) {
+
+                        }
+                    }
+                );
+
+                return;
+            });
+        });
+    </script>
+<?php endif;?>
+

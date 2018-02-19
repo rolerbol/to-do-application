@@ -1,0 +1,30 @@
+<?php
+    $form = $this->form;
+    $form->setAttribute('action', $this->url('tasks.edit', ['taskID' => $this->taskID]));
+    $form->prepare();
+?>
+
+<div class="row">
+    <div class="col-md-12">
+        <?php echo $this->flashMessenger()->renderCurrent('error', ['alert', 'alert-danger', 'list-unstyled']);?>
+
+        <?php echo $this->form()->openTag($form); ?>
+
+        <div class="form-group">
+            <?php echo $this->formLabel($form->get('taskText')); ?>
+            <?php echo $this->formElement($form->get('taskText')); ?>
+            <?php echo $this->formElementErrors($form->get('taskText'), array('class' => 'alert alert-danger list-unstyled')); ?>
+        </div>
+
+        <div class="form-group">
+            <?php echo $this->formLabel($form->get('taskStatus')); ?>
+            <?php echo $this->formElement($form->get('taskStatus')); ?>
+            <?php echo $this->formElementErrors($form->get('taskStatus'), array('class' => 'alert alert-danger list-unstyled')); ?>
+        </div>
+
+        <?php // echo $this->formElement($form->get('submit')); ?>
+
+        <?php echo $this->form()->closeTag(); ?>
+    </div>
+</div>
+

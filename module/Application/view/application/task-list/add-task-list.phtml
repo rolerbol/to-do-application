@@ -1,0 +1,21 @@
+<?php
+    $form = $this->form;
+    $form->setAttribute('action', $this->url('tasks.list.add'));
+    $form->prepare();
+?>
+
+<div class="row">
+    <div class="col-md-12">
+        <?php echo $this->flashMessenger()->renderCurrent('error', ['alert', 'alert-danger', 'list-unstyled']);?>
+        
+        <?php echo $this->form()->openTag($form); ?>
+
+        <div class="form-group">
+            <?php echo $this->formLabel($form->get('name')); ?>
+            <?php echo $this->formElement($form->get('name')); ?>
+            <?php echo $this->formElementErrors($form->get('name'), array('class' => 'alert alert-danger list-unstyled')); ?>
+        </div>
+
+        <?php echo $this->form()->closeTag(); ?>
+    </div>
+</div>

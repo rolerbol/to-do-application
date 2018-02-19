@@ -1,0 +1,474 @@
+<div class="row">
+    <div class="col-lg-12">
+        <?php foreach ($this->allUsersTaskLists as $userID => $userTasksResult):?>
+            <?php $user = $userTasksResult['user'];?>
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">
+                    <h3 class="panel-title">Tasks for user <?php echo $user->getUserEmail();?></h3>
+                </div>
+                <div class="panel-body">
+                    <?php echo $this->flashMessenger()->renderCurrent('error', ['alert', 'alert-danger', 'list-unstyled']);?>
+                    <?php echo $this->flashMessenger()->renderCurrent('success', ['alert', 'alert-success', 'list-unstyled']);?>
+                    <br>
+                    <div class="tasksContainer">
+                        <?php $userTaskLists = $userTasksResult['userTaskLists'];?>
+                        <?php foreach ($userTaskLists as $listID => $userTaskListR):?>
+                            <?php $userTaskList = $userTaskListR['userTaskList'];?>
+                            <?php $tasks = $userTaskListR['tasks'];?>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <h3 class="panel-title text-left"><?php echo $userTaskList->getName();?></h3>
+                                        </div>
+                                        <div class="col-lg-3 col-lg-offset-3">
+                                            <div class="dropdown">
+                                                <a class="btn btn-default dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    List Actions
+                                                    <span class="caret"></span>
+                                                </a>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                                    <li><a class="dropdown-item removeTaskListButton" href="#" data-user-list="<?php echo $userTaskList->getUserTaskListID()?>">Remove list</a></li>
+                                                    <li><a class="dropdown-item archiveTaskListButton" href="#" data-user-list="<?php echo $userTaskList->getUserTaskListID()?>">Archive list</a></li>
+                                                    <?php if ($userTaskList->getDeleteRequest()):?>
+                                                        <li><a class="dropdown-item confirmTaskListDeleteButton" href="#" data-user-list="<?php echo $userTaskList->getUserTaskListID();?>">Confirm delete request</a></li>
+                                                    <?php endif;?>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <?php if ($userTaskList->getDeleteRequest()):?>
+                                            <div class="col-lg-12 text-left">
+                                                <p class="text-danger">Please confirm task list delete request!</p>
+                                            </div>
+                                        <?php endif;?>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Task</th>
+                                                    <th>Status</th>
+                                                    <th>Type</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach($tasks as $taskTimeStamp => $userTask): ?>
+                                                    <tr>
+                                                        <?php $dateObj = new \DateTime();?>
+                                                        <?php $dateObj->setTimestamp($taskTimeStamp);?>
+                                                        <td style="word-wrap:break-word; word-break: break-all;"><?php echo $dateObj->format('l d.m');?></td>
+                                                        <td style="word-wrap:break-word; word-break: break-all;"><?php echo $userTask->getTaskText();?></td>
+                                                        <td style="white-space: nowrap;"><?php echo $userTask->getTaskStatus();?></td>
+                                                        <td style="white-space: nowrap;"><?php echo $userTask->getTaskType()->getTaskTypeName();?></td>
+                                                        <td>
+                                                            <a class="dropdown-item removeTaskButton" href="#" data-user-task="<?php echo $userTask->getTaskID()?>" title="Remove task">
+                                                                <i class="glyphicon glyphicon-trash"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach;?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach;?>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach;?>
+    </div>
+</div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery(document).on('click', '.confirmTaskListDeleteButton', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var taskID = jQuery(this).attr('data-user-list');
+
+            var url = '<?php echo $this->url('tasks.list.confirm.delete');?>' + '/' + taskID;
+
+            jQuery('#confirmBody').html('Are you sure you want to confirm this delete request?');
+            jQuery('#confirmBody').attr('data-url', url);
+            jQuery('#confirmModal').modal('show');
+            return;
+        });
+        
+        jQuery(document).on('click', '.removeTaskButton', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var taskID = jQuery(this).attr('data-user-task');
+
+            var url = '<?php echo $this->url('tasks.remove');?>' + '/' + taskID;
+
+            jQuery('#confirmBody').html('Are you sure you want to delete task?');
+            jQuery('#confirmBody').attr('data-url', url);
+            jQuery('#confirmModal').modal('show');
+            return;
+        });
+
+        jQuery(document).on('click', '.removeTaskListButton', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var taskListID = jQuery(this).attr('data-user-list');
+
+            var url = '<?php echo $this->url('tasks.list.remove');?>' + '/' + taskListID;
+
+            jQuery('#confirmBody').html('Are you sure you want to delete task list?');
+            jQuery('#confirmBody').attr('data-url', url);
+            jQuery('#confirmModal').modal('show');
+            return;
+        });
+
+        jQuery(document).on('click', '.archiveTaskListButton', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var taskListID = jQuery(this).attr('data-user-list');
+
+            var url = '<?php echo $this->url('tasks.list.remove');?>' + '/' + taskListID;
+
+            jQuery('#confirmBody').html('Are you sure you want to archive task list?');
+            jQuery('#confirmBody').attr('data-url', url);
+            jQuery('#confirmModal').modal('show');
+            return;
+        });
+
+        jQuery(document).on('click', '#confirmButton', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var url = jQuery('#confirmBody').attr('data-url');
+
+            jQuery.ajax(
+                {
+                    type: "POST",
+                    url: url,
+                    data: {},
+                    success: function(data) {
+                        if (typeof data.redirectUrl != 'undefined' && data.status) {
+                            window.location = data.redirectUrl;
+                        }
+                    },
+                    error: function(data) {
+                        if (typeof data.message != 'undefined') {
+//                                jQuery('#errorMessage').html(data.message);
+                        }
+                    },
+                    complete : function(data) {
+
+                    }
+                }
+            );
+
+            return;
+        });
+
+        jQuery(document).on('click', '.editTaskButton', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var taskID = jQuery(this).attr('data-user-task');
+
+            var url = '<?php echo $this->url('tasks.edit');?>' + '/' + taskID;
+
+            jQuery.ajax(
+                {
+                    type: "GET",
+                    url: url,
+                    data: {},
+                    success: function(data) {
+                        if (typeof data.redirectUrl != 'undefined' && data.status) {
+                            window.location = data.redirectUrl;
+                        } else if (typeof data.content != 'undefined') {
+                            jQuery('#editTaskBody').html(data.content);
+                            jQuery('#editTaskModal').modal('show');
+                        }
+                    },
+                    error: function(data) {
+                        if (typeof data.message != 'undefined') {
+//                                jQuery('#errorMessage').html(data.message);
+                        }
+                    },
+                    complete : function(data) {
+
+                    }
+                }
+            );
+
+            return;
+        });
+
+        jQuery('#editTaskModal').on('hidden.bs.modal', function (event) {
+            jQuery('#editTaskBody').html('');
+        });
+
+        jQuery(document).on('click', '#editTaskButton', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var formActionUrl = jQuery("#edit-task-form").attr('action');
+            var formData = jQuery("#edit-task-form").serialize();
+
+            jQuery.ajax(
+                {
+                    type: "POST",
+                    url: formActionUrl,
+                    data: formData,
+                    success: function(data) {
+                        if (typeof data.redirectUrl != 'undefined' && data.status) {
+                            window.location = data.redirectUrl;
+                        } else if (typeof data.content != 'undefined') {
+                            jQuery('#editTaskBody').html(data.content);
+                        }
+                    },
+                    error: function(data) {
+                        if (typeof data.message != 'undefined') {
+//                                jQuery('#errorMessage').html(data.message);
+                        }
+                    },
+                    complete : function(data) {
+
+                    }
+                }
+            );
+
+            return;
+        });
+
+        jQuery(document).on('click', '#addTaskButton', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var taskListID = jQuery(this).attr('data-user-list');
+
+            var url = '<?php echo $this->url('tasks.add');?>' + '/' + taskListID;
+
+            jQuery.ajax(
+                {
+                    type: "GET",
+                    url: url,
+                    data: {},
+                    success: function(data) {
+                        if (typeof data.redirectUrl != 'undefined' && data.status) {
+                            window.location = data.redirectUrl;
+                        } else if (typeof data.content != 'undefined') {
+                            jQuery('#createNewTaskBody').html(data.content);
+                            jQuery('#createNewTaskModal').modal('show');
+                        }
+                    },
+                    error: function(data) {
+                        if (typeof data.message != 'undefined') {
+//                                jQuery('#errorMessage').html(data.message);
+                        }
+                    },
+                    complete : function(data) {
+
+                    }
+                }
+            );
+
+            return;
+        });
+
+        jQuery('#createNewTaskModal').on('hidden.bs.modal', function (event) {
+            jQuery('#createNewTaskBody').html('');
+        });
+
+        jQuery(document).on('click', '#createTaskButton', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var formActionUrl = jQuery("#add-task-form").attr('action');
+            var formData = jQuery("#add-task-form").serialize();
+
+            jQuery.ajax(
+                {
+                    type: "POST",
+                    url: formActionUrl,
+                    data: formData,
+                    success: function(data) {
+                        if (typeof data.redirectUrl != 'undefined' && data.status) {
+                            window.location = data.redirectUrl;
+                        } else if (typeof data.content != 'undefined') {
+                            jQuery('#createNewTaskBody').html(data.content);
+                        }
+                    },
+                    error: function(data) {
+                        if (typeof data.message != 'undefined') {
+//                                jQuery('#errorMessage').html(data.message);
+                        }
+                    },
+                    complete : function(data) {
+
+                    }
+                }
+            );
+
+            return;
+        });
+
+        jQuery(document).on('click', '#addListButton', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var url = '<?php echo $this->url('tasks.list.add');?>';
+
+            jQuery.ajax(
+                {
+                    type: "GET",
+                    url: url,
+                    data: {},
+                    success: function(data) {
+                        if (typeof data.redirectUrl != 'undefined' && data.status) {
+                            window.location = data.redirectUrl;
+                        } else if (typeof data.content != 'undefined') {
+                            jQuery('#createNewTaskListBody').html(data.content);
+                            jQuery('#createNewTaskListModal').modal('show');
+                        }
+                    },
+                    error: function(data) {
+                        if (typeof data.message != 'undefined') {
+//                                jQuery('#errorMessage').html(data.message);
+                        }
+                    },
+                    complete : function(data) {
+
+                    }
+                }
+            );
+
+            return;
+        });
+
+        jQuery('#createNewTaskListModal').on('hidden.bs.modal', function (event) {
+            jQuery('#createNewTaskListBody').html('');
+        });
+
+        jQuery(document).on('click', '#createTaskListButton', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var formActionUrl = jQuery("#add-task-list-form").attr('action');
+            var formData = jQuery("#add-task-list-form").serialize();
+
+            jQuery.ajax(
+                {
+                    type: "POST",
+                    url: formActionUrl,
+                    data: formData,
+                    success: function(data) {
+                        if (typeof data.redirectUrl != 'undefined' && data.status) {
+                            window.location = data.redirectUrl;
+                        } else if (typeof data.content != 'undefined') {
+                            jQuery('#createNewTaskListBody').html(data.content);
+                        }
+                    },
+                    error: function(data) {
+                        if (typeof data.message != 'undefined') {
+//                                jQuery('#errorMessage').html(data.message);
+                        }
+                    },
+                    complete : function(data) {
+
+                    }
+                }
+            );
+
+            return;
+        });
+    });
+</script>
+
+
+<!-- Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmModalLabel">Confirm action</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="confirmBody" class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            <button type="button" class="btn btn-primary" id="confirmButton">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="createNewTaskModal" tabindex="-1" role="dialog" aria-labelledby="createNewTaskModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createNewTaskModalLabel">Create new task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="createNewTaskBody" class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="createTaskButton">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="editTaskModal" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editTaskModalLabel">Edit task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="editTaskBody" class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="editTaskButton">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="createNewTaskListModal" tabindex="-1" role="dialog" aria-labelledby="createNewTaskListModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createNewTaskListModalLabel">Create new task list</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="createNewTaskListBody" class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="createTaskListButton">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
